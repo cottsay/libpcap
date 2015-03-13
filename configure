@@ -631,6 +631,8 @@ CAN_SRC
 PCAP_SUPPORT_CAN
 CANUSB_SRC
 PCAP_SUPPORT_CANUSB
+CEC_SRC
+PCAP_SUPPORT_CEC
 BT_MONITOR_SRC
 BT_SRC
 PCAP_SUPPORT_BT
@@ -748,6 +750,7 @@ enable_universal
 enable_shared
 enable_usb
 enable_bluetooth
+enable_cec
 enable_canusb
 enable_can
 enable_dbus
@@ -1386,6 +1389,8 @@ Optional Features:
   --enable-usb            enable nusb support [default=yes, if support
                           available]
   --enable-bluetooth      enable Bluetooth support [default=yes, if support
+                          available]
+  --enable-cec            enable cec support [default=yes, if support
                           available]
   --enable-canusb         enable canusb support [default=yes, if support
                           available]
@@ -8144,6 +8149,102 @@ $as_echo "$as_me: no Bluetooth sniffing support implemented for $host_os" >&6;}
 		;;
 	esac
 
+
+
+fi
+
+# Check whether --enable-cec was given.
+if test "${enable_cec+set}" = set; then :
+  enableval=$enable_cec;
+else
+  enable_cec=ifsupportavailable
+fi
+
+
+if test "x$enable_cec" != "xno" ; then
+		case "$host_os" in
+	linux*)
+		ac_fn_c_check_header_mongrel "$LINENO" "libcec/cecc.h" "ac_cv_header_libcec_cecc_h" "$ac_includes_default"
+if test "x$ac_cv_header_libcec_cecc_h" = xyes; then :
+
+		    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for cec_initialise in -lcec" >&5
+$as_echo_n "checking for cec_initialise in -lcec... " >&6; }
+if ${ac_cv_lib_cec_cec_initialise+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  ac_check_lib_save_LIBS=$LIBS
+LIBS="-lcec  $LIBS"
+cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+/* Override any GCC internal prototype to avoid an error.
+   Use char because int might match the return type of a GCC
+   builtin and then its argument prototype would still apply.  */
+#ifdef __cplusplus
+extern "C"
+#endif
+char cec_initialise ();
+int
+main ()
+{
+return cec_initialise ();
+  ;
+  return 0;
+}
+_ACEOF
+if ac_fn_c_try_link "$LINENO"; then :
+  ac_cv_lib_cec_cec_initialise=yes
+else
+  ac_cv_lib_cec_cec_initialise=no
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+LIBS=$ac_check_lib_save_LIBS
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_cec_cec_initialise" >&5
+$as_echo "$ac_cv_lib_cec_cec_initialise" >&6; }
+if test "x$ac_cv_lib_cec_cec_initialise" = xyes; then :
+
+
+$as_echo "#define PCAP_SUPPORT_CEC 1" >>confdefs.h
+
+			CEC_SRC=pcap-cec.c
+			LIBS="-lcec $LIBS"
+			ac_lbl_has_libcec=yes
+
+else
+  ac_lbl_has_libcec=no
+
+fi
+
+
+else
+  ac_lbl_has_libcec=no
+
+fi
+
+
+		if test "x$ac_lbl_has_libcec" = "xyes" ; then
+		    { $as_echo "$as_me:${as_lineno-$LINENO}: cec sniffing is supported" >&5
+$as_echo "$as_me: cec sniffing is supported" >&6;}
+		else
+		    if test "x$enable_cec" = "xyes" ; then
+			as_fn_error $? "cec sniffing is not supported; install libcec devel to enable it" "$LINENO" 5
+		    else
+			{ $as_echo "$as_me:${as_lineno-$LINENO}: cec sniffing is not supported; install libcec devel to enable it" >&5
+$as_echo "$as_me: cec sniffing is not supported; install libcec devel to enable it" >&6;}
+		    fi
+		fi
+		;;
+	*)
+		if test "x$enable_cec" = "xyes" ; then
+		    as_fn_error $? "no cec sniffing support implemented for $host_os" "$LINENO" 5
+		else
+		    { $as_echo "$as_me:${as_lineno-$LINENO}: no cec sniffing support implemented for $host_os" >&5
+$as_echo "$as_me: no cec sniffing support implemented for $host_os" >&6;}
+		fi
+		;;
+	esac
 
 
 fi

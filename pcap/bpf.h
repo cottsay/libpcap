@@ -1324,7 +1324,12 @@ struct bpf_program {
  */
 #define DLT_WATTSTOPPER_DLM     263
 
-#define DLT_MATCHING_MAX	263	/* highest value in the "matching" range */
+/*
+ * HDMI CEC format.
+ */
+#define DLT_CEC 264
+
+#define DLT_MATCHING_MAX	264	/* highest value in the "matching" range */
 
 /*
  * DLT and savefile link type values are split into a class and

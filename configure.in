@@ -1545,6 +1545,51 @@ if test "x$enable_bluetooth" != "xno" ; then
 	AC_SUBST(BT_MONITOR_SRC)
 fi
 
+AC_ARG_ENABLE([cec],
+[AC_HELP_STRING([--enable-cec],[enable cec support @<:@default=yes, if support available@:>@])],
+    [],
+    [enable_cec=ifsupportavailable])
+
+if test "x$enable_cec" != "xno" ; then
+	dnl check for CEC sniffing support
+	case "$host_os" in
+	linux*)
+		AC_CHECK_HEADER(libcec/cecc.h,
+		[
+		    AC_CHECK_LIB(cec, cec_initialise,
+		    [
+			AC_DEFINE(PCAP_SUPPORT_CEC, 1, [target host supports cec])
+			CEC_SRC=pcap-cec.c
+			LIBS="-lcec $LIBS"
+			ac_lbl_has_libcec=yes
+		    ],
+		    ac_lbl_has_libcec=no
+		    )
+		],
+		ac_lbl_has_libcec=no
+		)
+		if test "x$ac_lbl_has_libcec" = "xyes" ; then
+		    AC_MSG_NOTICE(cec sniffing is supported)
+		else
+		    if test "x$enable_cec" = "xyes" ; then
+			AC_MSG_ERROR(cec sniffing is not supported; install libcec devel to enable it)
+		    else
+			AC_MSG_NOTICE(cec sniffing is not supported; install libcec devel to enable it)
+		    fi
+		fi
+		;;
+	*)
+		if test "x$enable_cec" = "xyes" ; then
+		    AC_MSG_ERROR(no cec sniffing support implemented for $host_os)
+		else
+		    AC_MSG_NOTICE(no cec sniffing support implemented for $host_os)
+		fi
+		;;
+	esac
+	AC_SUBST(PCAP_SUPPORT_CEC)
+	AC_SUBST(CEC_SRC)
+fi
+
 AC_ARG_ENABLE([canusb],
 [AC_HELP_STRING([--enable-canusb],[enable canusb support @<:@default=yes, if support available@:>@])],
     [],

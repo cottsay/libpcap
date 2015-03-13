@@ -100,6 +100,10 @@
 #include "pcap-canusb-linux.h"
 #endif
 
+#ifdef PCAP_SUPPORT_CEC
+#include "pcap-cec.h"
+#endif
+
 #ifdef PCAP_SUPPORT_NETFILTER
 #include "pcap-netfilter-linux.h"
 #endif
@@ -334,6 +338,9 @@ struct capture_source_type {
 #endif
 #ifdef PCAP_SUPPORT_CAN
 	{ can_findalldevs, can_create },
+#endif
+#ifdef PCAP_SUPPORT_CEC
+	{ cec_findalldevs, cec_create },
 #endif
 #ifdef PCAP_SUPPORT_USB
 	{ usb_findalldevs, usb_create },
@@ -1233,6 +1240,7 @@ static struct dlt_choice dlt_choices[] = {
 	DLT_CHOICE(DLT_PROFIBUS_DL, "PROFIBUS data link layer"),
 	DLT_CHOICE(DLT_PKTAP, "Apple DLT_PKTAP"),
 	DLT_CHOICE(DLT_EPON, "Ethernet with 802.3 Clause 65 EPON preamble"),
+	DLT_CHOICE(DLT_CEC, "HDMI CEC"),
 	DLT_CHOICE_SENTINEL
 };
 

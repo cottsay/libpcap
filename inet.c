@@ -902,6 +902,9 @@ pcap_lookupnet(device, netp, maskp, errbuf)
 #ifdef PCAP_SUPPORT_BT
 	    || strstr(device, "bluetooth") != NULL
 #endif
+#ifdef PCAP_SUPPORT_CEC
+	    || strstr(device, "cec") != NULL
+#endif
 #ifdef PCAP_SUPPORT_USB
 	    || strstr(device, "usbmon") != NULL
 #endif

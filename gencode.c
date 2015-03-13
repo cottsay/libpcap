@@ -3322,6 +3322,9 @@ gen_linktype(proto)
 		 */
 		bpf_error("NFLOG link-layer type filtering not implemented");
 
+	case DLT_CEC:
+		bpf_error("HDMI CEC link-layer type filtering not implemented");
+
 	default:
 		/*
 		 * Does this link-layer header type have a field

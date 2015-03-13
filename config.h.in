@@ -265,6 +265,9 @@
 /* target host supports canusb */
 #undef PCAP_SUPPORT_CANUSB
 
+/* target host supports cec sniffing */
+#undef PCAP_SUPPORT_CEC
+
 /* support D-Bus sniffing */
 #undef PCAP_SUPPORT_DBUS
 
